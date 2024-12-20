@@ -14,11 +14,9 @@ public class EtlProcessor(ICsvProcessor csvProcessor, IDataCleaner dataCleaner, 
             logger.LogInformation("Starting ETL process for file: {FilePath}", filePath);
             var records = csvProcessor.ProcessCsvAsync(filePath);
 
-            // Clean data and get duplicates
             var (validRecords, duplicates) = await dataCleaner.CleanDataAsync(
                 records);
 
-            // Write duplicates to file if any exist
             if (duplicates.Any())
             {
                 var duplicatesPath = Path.Combine(
@@ -28,7 +26,6 @@ public class EtlProcessor(ICsvProcessor csvProcessor, IDataCleaner dataCleaner, 
                 await WriteDuplicatesToCsvAsync(duplicates, duplicatesPath);
             }
 
-            // Bulk insert valid records
             await dataRepository.BulkInsertAsync(validRecords);
 
             logger.LogInformation("ETL process completed successfully");

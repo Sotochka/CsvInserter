@@ -21,7 +21,6 @@ public class CsvProcessor(ILogger<CsvProcessor> logger) : ICsvProcessor
         using var reader = new StreamReader(filePath);
         using var csv = new CsvReader(reader, config);
 
-        // Read and validate headers
         await csv.ReadAsync();
         csv.ReadHeader();
         ValidateHeaders(csv.HeaderRecord);
@@ -29,14 +28,12 @@ public class CsvProcessor(ILogger<CsvProcessor> logger) : ICsvProcessor
         var rowNumber = 0;
         string[] currentRow;
 
-        // First read raw lines to check for empty spaces
         while (await csv.ReadAsync())
         {
             rowNumber++;
             
                 currentRow = csv.Parser.Record;
 
-                // Check if any field in the row contains only whitespace
                 if (currentRow.Any(field => string.IsNullOrWhiteSpace(field)))
                 {
                     logger.LogWarning("Row {RowNumber} contains empty fields: {Row}", 
@@ -45,7 +42,6 @@ public class CsvProcessor(ILogger<CsvProcessor> logger) : ICsvProcessor
                     continue;
                 }
 
-                // If we get here, the row has no empty fields, so we can parse it
                 var record = csv.GetRecord<TripModel>();
 
                 if (record != null)

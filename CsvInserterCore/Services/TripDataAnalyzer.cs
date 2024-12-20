@@ -8,7 +8,6 @@ public class TripDataAnalyzer(ILogger<TripDataAnalyzer> logger, IDataRepository 
     {
         logger.LogInformation("Starting data analysis...");
 
-        // Get highest tips by location
         var highestTips = await dataRepository.GetHighestTipsByLocation();
         logger.LogInformation("Top locations by average tip:");
         foreach (var location in highestTips.Take(5))
@@ -19,7 +18,6 @@ public class TripDataAnalyzer(ILogger<TripDataAnalyzer> logger, IDataRepository 
                 location.TripCount);
         }
 
-        // Get longest trips by distance
         var longestTrips = await dataRepository.GetLongestTrips(5);
         logger.LogInformation("\nLongest trips by distance:");
         foreach (var trip in longestTrips)
@@ -29,7 +27,6 @@ public class TripDataAnalyzer(ILogger<TripDataAnalyzer> logger, IDataRepository 
                 trip.fare_amount.ToString("F2"));
         }
 
-        // Get longest trips by duration
         var longestDurationTrips = await dataRepository.GetLongestDurationTrips(5);
         logger.LogInformation("\nLongest trips by duration:");
         foreach (var trip in longestDurationTrips)

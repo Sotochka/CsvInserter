@@ -23,7 +23,6 @@ public class DataRepository(IOptions<DatabaseOptions> options, ILogger<DataRepos
             BatchSize = BatchSize
         };
 
-        // Map the properties to database columns
         bulkCopy.ColumnMappings.Add(nameof(TripModel.tpep_pickup_datetime), "tpep_pickup_datetime");
         bulkCopy.ColumnMappings.Add(nameof(TripModel.tpep_dropoff_datetime), "tpep_dropoff_datetime");
         bulkCopy.ColumnMappings.Add(nameof(TripModel.passenger_count), "passenger_count");
@@ -34,7 +33,6 @@ public class DataRepository(IOptions<DatabaseOptions> options, ILogger<DataRepos
         bulkCopy.ColumnMappings.Add(nameof(TripModel.fare_amount), "fare_amount");
         bulkCopy.ColumnMappings.Add(nameof(TripModel.tip_amount), "tip_amount");
 
-        // Convert to DataTable and bulk insert
         var dataTable = ConvertToDataTable(trips);
         await bulkCopy.WriteToServerAsync(dataTable);
     }
@@ -128,7 +126,6 @@ public class DataRepository(IOptions<DatabaseOptions> options, ILogger<DataRepos
     {
         var table = new DataTable();
         
-        // Add columns
         table.Columns.Add("tpep_pickup_datetime", typeof(DateTime));
         table.Columns.Add("tpep_dropoff_datetime", typeof(DateTime));
         table.Columns.Add("passenger_count", typeof(int));
@@ -139,7 +136,6 @@ public class DataRepository(IOptions<DatabaseOptions> options, ILogger<DataRepos
         table.Columns.Add("fare_amount", typeof(decimal));
         table.Columns.Add("tip_amount", typeof(decimal));
 
-        // Add rows
         foreach (var trip in trips)
         {
             table.Rows.Add(

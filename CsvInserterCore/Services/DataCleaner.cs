@@ -27,7 +27,6 @@ public class DataCleaner : IDataCleaner
     private void CleanRecord(TripModel record)
     {
         record.store_and_fwd_flag = ValidationHelper.NormalizeStoreAndFwdFlag(record.store_and_fwd_flag);
-        // Convert store_and_fwd_flag values
         record.store_and_fwd_flag = record.store_and_fwd_flag.Trim().ToUpper() switch
         {
             "Y" => "Yes",
@@ -35,10 +34,8 @@ public class DataCleaner : IDataCleaner
             _ => record.store_and_fwd_flag
         };
 
-        // Trim all string fields
         record.store_and_fwd_flag = record.store_and_fwd_flag.Trim();
 
-        // Additional validation could be added here
         if (record.passenger_count < 0)
             record.passenger_count = 0;
 

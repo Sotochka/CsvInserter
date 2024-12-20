@@ -13,11 +13,9 @@ public static class DependencyConfig
     {
         services.AddOptions();
 
-        // Add configuration
         services.Configure<DatabaseOptions>(
             configuration.GetSection("ConnectionStrings"));
 
-        // Register services
         services.AddScoped<ICsvProcessor, CsvProcessor>()
             .AddScoped<IDataCleaner, DataCleaner>()
             .AddScoped<IDataRepository, DataRepository>()
